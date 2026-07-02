@@ -1,14 +1,23 @@
 package com.api.test;
 
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
+import org.testng.annotations.Test;
 
-public class AppTest 
-{
+public class AppTest {
+
     @Test
-    public void testAdd()
-    {
-        App app = new App();
-        assertEquals(5, app.add(2, 3));
+    public void verifyGetUserData() {
+        baseURI = "https://reqres.in";
+
+        given()
+            .header("Content-Type", "application/json")
+        .when()
+            .get("/api/users/2")
+        .then()
+            .statusCode(200)
+            .body("data.email", equalTo("janet.weaver@reqres.in"))
+            .body("data.first_name", equalTo("Janet"))
+            .log().all(); 
     }
 }
